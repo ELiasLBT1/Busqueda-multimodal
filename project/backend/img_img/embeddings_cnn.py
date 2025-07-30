@@ -4,13 +4,13 @@ from torchvision import models, transforms
 from PIL import Image
 import numpy as np
 
-DATASET_DIR = '../data/img'  # Ajusta la ruta aquí
+DATASET_DIR = '../data/img'  
 EMBEDDINGS_FILE = 'embeddings_dataset.npy'
 FILENAMES_FILE = 'filenames_dataset.npy'
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = models.resnet50(pretrained=True)
-model = torch.nn.Sequential(*(list(model.children())[:-1]))  # Quitar capa final
+model = torch.nn.Sequential(*(list(model.children())[:-1]))  
 model.eval()
 model.to(device)
 

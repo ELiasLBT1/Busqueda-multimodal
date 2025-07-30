@@ -63,8 +63,8 @@ preprocess = transforms.Compose([
     ),
 ])
 
-OPENAI_API_KEY = "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"
-GEMINI_API_KEY = "AIzaSyCVdHriZtzhgFDzDpekrQrEy-pYieOTsG4"
+OPENAI_API_KEY = ""
+GEMINI_API_KEY = ""
 
 openai.api_key = OPENAI_API_KEY
 genai.configure(api_key=GEMINI_API_KEY)
