@@ -16,7 +16,9 @@ except LookupError:
     nltk.download('stopwords')
 
 # Definir la ruta a las carpetas de imágenes
-img_path = '../data/img/'
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+img_path = os.path.join(parent_dir, 'data', 'img')
 
 # Extraer los títulos de los nombres de las carpetas
 def obtener_titulos_desde_carpetas(ruta):

@@ -5,7 +5,10 @@ from nltk.tokenize import word_tokenize
 import string
 import json
 
-file_path = '../data/dataset_autos_descripciones.json'
+# Construir ruta absoluta al archivo de datos
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+file_path = os.path.join(parent_dir, 'data', 'dataset_autos_descripciones.json')
 
 # Leer el archivo JSON que contiene un array
 with open(file_path, 'r', encoding='utf-8') as f:

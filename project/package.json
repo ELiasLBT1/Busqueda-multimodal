@@ -14,7 +14,9 @@
     "smart": "python backend/smart_dev.py",
     "init": "npm run preprocess && npm run dev",
     "install-only": "npm install && npm run install-python-deps && npm run preprocess",
-    "setup": "npm install && npm run install-python-deps && npm run preprocess && npm run dev",
+    "setup": "npm install && npm run install-python-deps && npm run preprocess",
+    "setup-and-start": "npm run setup && npm run full-stack",
+    "full-stack": "concurrently \"uvicorn backend.api_server:app --reload\" \"npm run dev\"",
     "start": "npm run smart"
   },
   "dependencies": {
@@ -28,6 +30,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
+    "concurrently": "^9.2.0",
     "eslint": "^9.9.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",
