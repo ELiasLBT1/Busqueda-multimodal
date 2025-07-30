@@ -4,11 +4,11 @@ from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-# Añadir la raíz del proyecto al PYTHONPATH para que 'project' sea importable
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+# Añadir la raíz del proyecto al PYTHONPATH para que 'backend' sea importable
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Importar función desde tu clase de búsqueda
-from project.backend.busqueda_texto.busqueda_texto import buscar_por_texto
+from backend.busqueda_texto.busqueda_texto import buscar_por_texto
 
 app = FastAPI()
 
@@ -49,3 +49,7 @@ def servir_imagen(nombre_archivo: str):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al servir imagen: {str(e)}")
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000, reload=True)
