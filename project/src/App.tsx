@@ -76,12 +76,32 @@ function App() {
   const handleImageUpload = async (file: File) => {
     setIsLoading(true);
     setCurrentQuery(`Imagen: ${file.name}`);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setResults(mockResults);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('http://127.0.0.1:8000/buscar-imagen', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+
+      // Transformar los resultados al formato esperado por el frontend
+      const transformedResults: Result[] = data.resultados.map((item: any, index: number) => ({
+        id: index.toString(),
+        image: `http://127.0.0.1:8000/imagen/${item.archivo}`,
+        name: item.titulo,
+        description: item.descripcion || 'Sin descripción disponible',
+      }));
+
+      setResults(transformedResults);
+    } catch (error) {
+      console.error('Error en búsqueda por imagen:', error);
+      setResults([]);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   const handleViewDetails = (result: Result) => {
