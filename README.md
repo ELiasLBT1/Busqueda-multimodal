@@ -1,34 +1,41 @@
 # 🔍 Búsqueda Multimodal de Vehículos
 
-Sistema avanzado de búsqueda que permite encontrar vehículos usando **texto** o **imágenes**, utilizando técnicas de IA y procesamiento multimodal.
+Sistema avanzado1. **📦 Ejecutar sistema completo:**
+   ```bash
+   # Terminal 1: Backend API 
+   uvicorn backend.api_server:app --reload
+   
+   # Terminal 2: Frontend (instala dependencias, preprocesa y ejecuta)
+   npm run setup
+   ```ueda que permite encontrar vehículos usando **texto** o **imágenes**, utilizando técnicas de IA y procesamiento multimodal.
 
 ## 🚀 Inicio Rápido
 
-### Opción 1: TODO AUTOMÁTICO - Un solo comando (RECOMENDADO) 🚀
+### Opción 1: Instalación completa automática (RECOMENDADO)
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/ELiasLBT1/Busqueda-multimodal.git
 cd Busqueda-multimodal/project
 
-# 2. Instalación + preprocesamiento + arranque completo automático
-npm run setup-and-start
-```
-**¡Esto arranca automáticamente ambos servidores (backend + frontend)!**
-
-### Opción 2: Instalación y ejecución manual (control total) ⚙️
-```bash
-# 1. Solo instalación y preprocesamiento
+# 2. Instalación completa + preprocesamiento
 npm run setup
 
-# 2. Luego ejecutar manualmente ambos servidores:
+# 3. Inicializar el backend
+uvicorn backend.api_server:app --reload
+```
+
+### Opción 2: Ejecución manual (después de la instalación)
+```bash
 # Terminal 1: Backend API (puerto 8000)
+cd project
 uvicorn backend.api_server:app --reload
 
-# Terminal 2: Frontend (puerto 5173/5174)  
+# Terminal 2: Frontend (puerto 5173/5174)
+cd project  
 npm run dev
 ```
 
-### Opción 3: Solo preprocesamiento (sin arrancar servidores) 📦
+### Opción 3: Solo preprocesamiento (sin iniciar servidores)
 ```bash
 npm run install-only
 ```
@@ -43,9 +50,7 @@ npm run install-only
 
 | Comando | Descripción |
 |---------|-------------|
-| `npm run setup-and-start` | **🚀 TODO AUTOMÁTICO** - Instalación + preprocesamiento + arranca ambos servidores |
-| `npm run setup` | **📦 Solo instalación** - Instala dependencias + preprocesamiento (sin arrancar servidores) |
-| `npm run full-stack` | **▶️ Arrancar ambos servidores** - Backend API + Frontend (después de setup) |
+| `npm run setup` | **Instalación completa + preprocesamiento + inicializar frontend** |
 | `npm start` | **Inicio inteligente** - Verifica y ejecuta preprocesamiento automáticamente |
 | `npm run install-only` | Solo instalación y preprocesamiento (sin iniciar servidores) |
 | `npm run install-python-deps` | Instala solo dependencias de Python |
@@ -57,21 +62,16 @@ npm run install-only
 
 **Para usar la búsqueda multimodal completa necesitas ejecutar AMBOS servidores:**
 
-1. **📦 Instalación (solo una vez):**
-   ```bash
-   npm run setup  # Instala todo y ejecuta preprocesamiento
-   ```
-
-2. **� Ejecutar sistema completo:**
+1. **� Ejecutar sistema completo:**
    ```bash
    # Terminal 1: Backend API 
    uvicorn backend.api_server:app --reload
    
    # Terminal 2: Frontend
-   npm run dev
+   npm run setup
    ```
 
-3. **🌐 Acceder a la aplicación:**
+2. **🌐 Acceder a la aplicación:**
    - **Frontend:** `http://localhost:5173` o `http://localhost:5174`
    - **API Backend:** `http://localhost:8000`
 
