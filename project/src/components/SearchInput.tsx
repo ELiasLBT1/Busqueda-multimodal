@@ -35,7 +35,7 @@ export default function SearchInput({ onSearch, isLoading, initialValue = '' }: 
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Buscar objetos, animales, lugares..."
+          placeholder="Buscar automóviles..."
           className="w-full pl-12 pr-12 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
           disabled={isLoading}
         />

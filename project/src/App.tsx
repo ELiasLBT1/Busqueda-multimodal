@@ -50,11 +50,27 @@ function App() {
     setCurrentQuery(query);
     setSearchQuery(query);
     
-    // Simulate API call
-    setTimeout(() => {
-      setResults(mockResults);
+    try {
+      // Llamar al endpoint real de búsqueda
+      const response = await fetch(`http://127.0.0.1:8000/buscar?query=${encodeURIComponent(query)}`);
+      const data = await response.json();
+      
+      // Transformar los resultados al formato esperado por el frontend
+      const transformedResults: Result[] = data.resultados.map((item: any, index: number) => ({
+        id: index.toString(),
+        image: `http://127.0.0.1:8000/imagen/${item.archivo}`, // Endpoint para servir imágenes
+        name: item.titulo,
+        description: item.descripcion || 'Sin descripción disponible', // Usar descripción real
+      }));
+      
+      setResults(transformedResults);
+    } catch (error) {
+      console.error('Error en búsqueda:', error);
+      // En caso de error, mostrar resultados vacíos
+      setResults([]);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   const handleImageUpload = async (file: File) => {

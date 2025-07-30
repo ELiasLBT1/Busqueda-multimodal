@@ -47,6 +47,7 @@ try:
     for i, registro in enumerate(dataset_conexion):
         dataset_con_embeddings.append({
             'titulo': registro['titulo'],
+            'descripcion': registro['descripcion'],  # Agregar descripción
             'archivo_imagen': registro['archivo_imagen'],
             'tokens_procesados': registro['tokens_procesados'],
             'indice_texto': registro['indice_texto'],

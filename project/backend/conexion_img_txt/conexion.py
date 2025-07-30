@@ -2,8 +2,10 @@ import sys
 import os
 
 # Añadir rutas de los paquetes locales
-sys.path.append(os.path.abspath("../preprocesamiento_texto"))
-sys.path.append(os.path.abspath("../preprocesamiento_img"))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(os.path.join(parent_dir, "preprocesamiento_texto"))
+sys.path.append(os.path.join(parent_dir, "preprocesamiento_img"))
 
 try:
     import preprocesamiento
@@ -23,6 +25,7 @@ except ImportError as e:
 try:
     titulos_texto = preprocesamiento.titulos_filtrados
     nombres_archivos = preprocesamiento.nombres_archivos
+    descripciones_originales = preprocesamiento.descripciones  # Descripción original sin procesar
     print(f"✅ Variables de texto importadas: {len(titulos_texto)} títulos")
 except AttributeError as e:
     print(f"❌ Error accediendo a variables de preprocesamiento: {e}")
@@ -48,6 +51,7 @@ for i, titulo in enumerate(titulos_texto):
     titulos_texto_map[titulo_norm] = {
         'indice': i, 
         'titulo_original': preprocesamiento.titulos[i],
+        'descripcion_original': descripciones_originales[i],  # Agregar descripción
         'tokens': titulo,
         'archivo': nombres_archivos[i]
     }
@@ -69,6 +73,7 @@ for titulo_norm, datos_texto in titulos_texto_map.items():
         datos_img = titulos_img_map[titulo_norm]
         dataset_conexion.append({
             'titulo': datos_texto['titulo_original'],
+            'descripcion': datos_texto['descripcion_original'],  # Agregar descripción
             'archivo_imagen': datos_texto['archivo'],
             'tokens_procesados': datos_texto['tokens'],
             'indice_texto': datos_texto['indice'],
