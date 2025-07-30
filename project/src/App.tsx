@@ -22,6 +22,7 @@ function App() {
   const [selectedResult, setSelectedResult] = useState<Result | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [ragDescripcion, setRagDescripcion] = useState<string | null>(null);
 
   // Mock data for demonstration
   const mockResults: Result[] = [
@@ -64,6 +65,7 @@ function App() {
       }));
       
       setResults(transformedResults);
+      await fetchRagDescripcion(transformedResults);
     } catch (error) {
       console.error('Error en búsqueda:', error);
       // En caso de error, mostrar resultados vacíos
@@ -94,8 +96,9 @@ function App() {
         name: item.titulo,
         description: item.descripcion || 'Sin descripción disponible',
       }));
-
+      
       setResults(transformedResults);
+      await fetchRagDescripcion(transformedResults);
     } catch (error) {
       console.error('Error en búsqueda por imagen:', error);
       setResults([]);
@@ -118,6 +121,30 @@ function App() {
     setSearchQuery(query);
     setActiveTab('text');
     handleSearch(query);
+  };
+
+  const fetchRagDescripcion = async (resultados: Result[]) => {
+    try {
+      const payload = {
+        modelo: selectedModel, // 'openai' o 'google'
+        resultados: resultados.map(r => ({
+          titulo: r.name,
+          descripcion: r.description || '',
+        })),
+      };
+
+      const response = await fetch('http://127.0.0.1:8000/rag-descripcion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+      setRagDescripcion(data.descripcion);
+      console.log(data.descripcion);
+    } catch (error) {
+      console.error('Error al obtener descripción RAG:', error);
+      setRagDescripcion(null);
+    }
   };
 
   return (
@@ -177,7 +204,7 @@ function App() {
               <div className="flex items-center space-x-3">
                 <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                 <span className="text-sm text-gray-600">
-                  {selectedModel === 'openai' ? 'OpenAI GPT-4o' : 'Google Gemini'}
+                  {selectedModel === 'openai' ? 'OpenAI GPT-4o-mini' : 'Google Gemini'}
                 </span>
               </div>
               <p className="text-xs text-gray-500 mt-2">
@@ -193,6 +220,13 @@ function App() {
                 <LoadingState message={`Analizando con IA de ${selectedModel === 'openai' ? 'OpenAI' : 'Google'}...`} />
               ) : (
                 <div className="p-6">
+                  {/* Mostrar la descripción RAG si existe */}
+                  {ragDescripcion && (
+                    <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+                      <h3 className="text-base font-semibold text-indigo-700 mb-1">Descripción general</h3>
+                      <p className="text-indigo-900">{ragDescripcion}</p>
+                    </div>
+                  )}
                   <ResultsGallery 
                     results={results} 
                     query={currentQuery} 

@@ -1,6 +1,6 @@
 import sys
 import os
-from fastapi import FastAPI, Query, HTTPException, UploadFile, File
+from fastapi import FastAPI, Query, HTTPException, UploadFile, File, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 import numpy as np
@@ -9,6 +9,9 @@ from torchvision import models, transforms
 from PIL import Image
 import json
 import io
+import openai
+import google.generativeai as genai  
+from openai import OpenAI
 
 # Añadir la raíz del proyecto al PYTHONPATH para que 'backend' sea importable
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -60,6 +63,12 @@ preprocess = transforms.Compose([
     ),
 ])
 
+OPENAI_API_KEY = "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"
+GEMINI_API_KEY = "AIzaSyCVdHriZtzhgFDzDpekrQrEy-pYieOTsG4"
+
+openai.api_key = OPENAI_API_KEY
+genai.configure(api_key=GEMINI_API_KEY)
+
 @app.get("/buscar")
 def buscar(query: str = Query(..., min_length=1)):
     """
@@ -98,6 +107,49 @@ async def buscar_imagen(file: UploadFile = File(...)):
         return {"resultados": resultados}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error procesando imagen: {str(e)}")
+
+@app.post("/rag-descripcion")
+async def rag_descripcion(payload: dict = Body(...)):
+    """
+    Endpoint que recibe el modelo y la lista de resultados.
+    """
+    modelo = payload.get("modelo", "openai")
+    resultados = payload.get("resultados", [])
+
+    contexto = "\n".join(
+        [f"{i+1}. {r['titulo']}: {r['descripcion']}" for i, r in enumerate(resultados)]
+    )
+    prompt = (
+        "Dado el siguiente listado de autos con sus descripciones, "
+        "genera un resumen o descripción general de los autos encontrados muy muy corto maximo 2 lineas:\n\n"
+        f"{contexto}\n\nDescripción:"
+    )
+
+    if modelo == "openai":
+        try:
+            client = OpenAI(api_key=OPENAI_API_KEY)
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "Eres un experto en autos."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=300,
+                temperature=0.7,
+            )
+            descripcion = response.choices[0].message.content.strip()
+            return {"descripcion": descripcion}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error con OpenAI: {str(e)}")
+    elif modelo == "google":
+        try:
+            model = genai.GenerativeModel('gemini-2.5-flash')
+            response = model.generate_content(prompt)
+            return {"descripcion": response.text}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error con Gemini: {str(e)}")
+    else:
+        raise HTTPException(status_code=400, detail="Modelo no soportado")
 
 if __name__ == "__main__":
     import uvicorn

@@ -16,7 +16,7 @@ export default function Header({ selectedModel, onModelChange }: HeaderProps) {
           </div>
           <div>
             <h1 className="text-xl font-semibold text-gray-900">Búsqueda Visual</h1>
-            <p className="text-sm text-gray-500">Identifica objetos mediante análisis con IA</p>
+            <p className="text-sm text-gray-500">Identifica objetos y analiza sus detalles mediante IA</p>
           </div>
         </div>
 
@@ -32,7 +32,7 @@ export default function Header({ selectedModel, onModelChange }: HeaderProps) {
               onChange={(e) => onModelChange(e.target.value as 'openai' | 'google')}
               className="px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
             >
-              <option value="openai">OpenAI GPT-4o</option>
+              <option value="openai">ChatGPT</option>
               <option value="google">Google Gemini</option>
             </select>
           </div>
