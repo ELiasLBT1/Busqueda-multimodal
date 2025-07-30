@@ -14,9 +14,7 @@
     "smart": "python backend/smart_dev.py",
     "init": "npm run preprocess && npm run dev",
     "install-only": "npm install && npm run install-python-deps && npm run preprocess",
-    "setup": "npm install && npm run install-python-deps && npm run preprocess",
-    "setup-and-start": "npm run setup && npm run full-stack",
-    "full-stack": "concurrently \"uvicorn backend.api_server:app --reload\" \"npm run dev\"",
+    "setup": "npm install && npm run install-python-deps && npm run preprocess && cd . && npm run dev",
     "start": "npm run smart"
   },
   "dependencies": {
